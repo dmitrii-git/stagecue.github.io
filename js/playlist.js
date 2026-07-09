@@ -293,7 +293,7 @@ clip.thumbnail
 
                 <div class="meta">
 
-                    ${clip.duration || "Loading..."}
+                   ${clip.duration ?? "Generating thumbnail..."}
 
                 </div>
 

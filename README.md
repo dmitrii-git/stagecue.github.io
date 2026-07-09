@@ -1,6 +1,6 @@
 # 🎬 StageCue
 
-> A professional web-based video playback application inspired by live event playback software such as Mitti.
+> A professional web-based video playback application inspired by live event playback software.
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-Active%20Development-orange)

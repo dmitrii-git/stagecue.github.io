@@ -225,6 +225,9 @@ export class Playlist {
 
             const div=document.createElement("div");
 
+            div.draggable = true;
+            div.dataset.index = index;
+
             div.className="playlist-item";
 
             if(index===this.currentIndex){
@@ -266,6 +269,48 @@ export class Playlist {
                 this.select(index);
 
             });
+
+            div.addEventListener("dragstart", e => {
+
+    e.dataTransfer.setData(
+        "text/plain",
+        index
+    );
+
+});
+
+div.addEventListener("dragover", e => {
+
+    e.preventDefault();
+
+});
+
+div.addEventListener("drop", e => {
+
+    e.preventDefault();
+
+    const from = Number(
+        e.dataTransfer.getData("text/plain")
+    );
+
+    const to = index;
+
+    if (from === to)
+        return;
+
+    const clip = this.items.splice(from,1)[0];
+
+    this.items.splice(to,0,clip);
+
+    if(this.currentIndex===from){
+
+        this.currentIndex=to;
+
+    }
+
+    this.render();
+
+});
 
             this.container.appendChild(div);
 

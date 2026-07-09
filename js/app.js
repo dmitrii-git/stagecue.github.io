@@ -48,6 +48,42 @@ class StageCue {
 
     };
 
+
+        document
+    .getElementById("loadPlaylist")
+    .onclick = () => {
+
+        const input = document.createElement("input");
+
+        input.type = "file";
+
+        input.accept = ".json,.stagecue.json";
+
+        input.onchange = e => {
+
+            const file = e.target.files[0];
+
+            if (!file)
+                return;
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+                const json =
+                    JSON.parse(reader.result);
+
+                this.storage.load(json);
+
+            };
+
+            reader.readAsText(file);
+
+        };
+
+        input.click();
+
+    };
         document
             .getElementById("openFiles")
             .onclick = () =>

@@ -216,10 +216,18 @@ export class Player {
 
     }
 
-    attachOutput(videoElement) {
+    attachOutput(videoElement){
 
-        this.output = videoElement;
+    this.output = videoElement;
+
+    if(this.currentClip){
+
+        this.output.src = this.currentClip.url;
 
     }
+
+    this.output.volume = this.video.volume;
+
+}
 
 }

@@ -2,7 +2,7 @@
 
 > A professional web-based video playback application inspired by live event playback software such as Mitti.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-Active%20Development-orange)
 ![Platform](https://img.shields.io/badge/platform-Web-success)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)

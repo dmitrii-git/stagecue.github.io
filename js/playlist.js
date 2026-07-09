@@ -2,6 +2,8 @@
 // StageCue Playlist Manager
 // ==============================================
 
+import { generateThumbnail } from "./thumbnails.js";
+
 export class Playlist {
 
     constructor(player) {

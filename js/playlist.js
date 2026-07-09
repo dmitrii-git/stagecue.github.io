@@ -3,6 +3,7 @@
 // ==============================================
 
 import { generateThumbnail } from "./thumbnails.js";
+import { UI } from "./ui.js";
 
 export class Playlist {
 
@@ -28,6 +29,8 @@ export class Playlist {
 }
 
     constructor(player) {
+
+        this.ui = new UI(this);
 
         this.player = player;
 
@@ -91,7 +94,7 @@ generateThumbnail(file)
                 result.duration
             );
 
-        this.render();
+        this.ui.render();
 
     });
 
@@ -119,8 +122,7 @@ generateThumbnail(file)
 
         this.player.load(clip);
 
-        this.render();
-
+        this.ui.render();
     }
 
     //-----------------------------------
@@ -200,8 +202,7 @@ generateThumbnail(file)
         if (this.currentIndex >= this.items.length)
             this.currentIndex = this.items.length-1;
 
-        this.render();
-
+        this.ui.render();
     }
 
     //-----------------------------------
@@ -220,7 +221,7 @@ generateThumbnail(file)
 
         this.currentIndex=-1;
 
-        this.render();
+        this.ui.render();
 
     }
 
@@ -351,7 +352,7 @@ div.addEventListener("drop", e => {
 
     }
 
-    this.render();
+    this.ui.render();
 
 });
 

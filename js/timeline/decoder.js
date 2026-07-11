@@ -1,20 +1,14 @@
 // ==========================================================
 // StageCue Audio Decoder
-// Decodes local audio/video into AudioBuffer
 // ==========================================================
 
 import { getAudioContext } from "./audio-context.js";
-
-this.context = getAudioContext();
 
 export default class Decoder {
 
     constructor() {
 
-        this.context = new (
-            window.AudioContext ||
-            window.webkitAudioContext
-        )();
+        this.context = getAudioContext();
 
     }
 
@@ -25,73 +19,74 @@ export default class Decoder {
     async decode(source) {
 
         if (!source)
-            throw new Error("No source specified.");
+            throw new Error("No media source.");
 
-        let arrayBuffer;
+        let buffer;
 
-        //---------------------------------------------
-        // File object
-        //---------------------------------------------
+        //-------------------------------------------------
+        // File / Blob
+        //-------------------------------------------------
 
-        if (source instanceof File) {
+        if (
+            source instanceof File ||
+            source instanceof Blob
+        ) {
 
-            arrayBuffer = await source.arrayBuffer();
+            buffer = await source.arrayBuffer();
 
         }
 
-        //---------------------------------------------
-        // URL string
-        //---------------------------------------------
+        //-------------------------------------------------
+        // Remote URL only
+        //-------------------------------------------------
 
         else if (typeof source === "string") {
+
+            if (source.startsWith("blob:")) {
+
+                throw new Error(
+
+                    "Decoder received a Blob URL. Pass the original File instead."
+
+                );
+
+            }
 
             const response = await fetch(source);
 
             if (!response.ok) {
 
                 throw new Error(
-                    `Unable to fetch "${source}".`
+
+                    `Unable to fetch ${source}`
+
                 );
 
             }
 
-            arrayBuffer =
+            buffer =
                 await response.arrayBuffer();
-
-        }
-
-        //---------------------------------------------
-        // Blob
-        //---------------------------------------------
-
-        else if (source instanceof Blob) {
-
-            arrayBuffer =
-                await source.arrayBuffer();
 
         }
 
         else {
 
             throw new Error(
-                "Unsupported media source."
+
+                "Unsupported source."
+
             );
 
         }
 
-        //---------------------------------------------
-        // decodeAudioData modifies buffer,
-        // so clone it first.
-        //---------------------------------------------
+        return await this.context.decodeAudioData(
 
-        const copy = arrayBuffer.slice(0);
+            buffer.slice(0)
 
-        return await this.context.decodeAudioData(copy);
+        );
 
     }
 
-    //---------------------------------------------------------
-    // Decode safely
     //---------------------------------------------------------
 
     async tryDecode(source) {
@@ -113,14 +108,10 @@ export default class Decoder {
     }
 
     //---------------------------------------------------------
-    // Resume AudioContext
-    //---------------------------------------------------------
 
     async resume() {
 
-        if (
-            this.context.state === "suspended"
-        ) {
+        if (this.context.state === "suspended") {
 
             await this.context.resume();
 
@@ -129,30 +120,12 @@ export default class Decoder {
     }
 
     //---------------------------------------------------------
-    // Suspend
-    //---------------------------------------------------------
 
     async suspend() {
 
-        if (
-            this.context.state === "running"
-        ) {
+        if (this.context.state === "running") {
 
             await this.context.suspend();
-
-        }
-
-    }
-
-    //---------------------------------------------------------
-    // Close
-    //---------------------------------------------------------
-
-    async destroy() {
-
-        if (this.context) {
-
-            await this.context.close();
 
         }
 
